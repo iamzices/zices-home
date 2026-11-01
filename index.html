@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projects by Zices | neo4j-guard, Chartable and more</title>
-  <meta name="description" content="Open-source tools by @iamzices, including neo4j-guard and Chartable. Find documentation, guides, and source code.">
+  <title>Projects by Zices | Moment, neo4j-guard, Chartable, and more</title>
+  <meta name="description" content="Explore projects by Zices. Moment is a private, temporary peer-to-peer chat room that runs in the browser. neo4j-guard is a Python library for blocking unsafe Cypher queries before execution. Chartable is a JavaScript library for interactive charts and tables built on Plotly.js and Tabulator.">
   <link rel="canonical" href="https://zices.com/">
   <link rel="icon" href="icon.png">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap">
@@ -12,20 +12,43 @@
     body { margin: 0; min-height: 100dvh; display: grid; place-items: center; padding: 64px 28px; box-sizing: border-box; background: #121212; color: #e4e4e4; color-scheme: dark; font: 15px/1.6 "Source Code Pro", ui-monospace, monospace; }
     main { display: grid; gap: 40px; width: min(100%, 420px); }
     h1 { margin: 0; }
-    img { display: block; width: min(360px, 100%); height: auto; }
+    img { display: block; width: 100%; height: auto; }
     h2 { margin: 0; font-size: inherit; font-weight: 600; }
-    p { margin: 0; color: #9a9a9a; }
+    p { margin: 0; color: #9a9a9a; text-align: justify; hyphens: auto; }
     a { color: inherit; text-decoration: none; text-underline-offset: 3px; }
     a:hover { text-decoration: underline; }
-    article div { display: flex; gap: 16px; margin-top: 4px; }
+    a:focus-visible { outline: 2px solid #8fd0ff; outline-offset: 3px; }
+    article { display: grid; gap: 8px; }
+    article div { display: flex; gap: 16px; }
+    h2 a { color: #8fd0ff; }
     section { display: grid; gap: 28px; }
     header { display: grid; gap: 16px; }
     address { display: flex; flex-wrap: wrap; gap: 8px 24px; color: #9a9a9a; font-style: normal; }
     address a { display: inline-flex; align-items: center; gap: 8px; }
     svg { width: 16px; height: 16px; fill: currentColor; }
+    /* Faint project shapes rising behind the page: chat bubbles (Moment), node graphs (neo4j-guard), bars (Chartable). */
+    .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .bg span { --c: color-mix(in srgb, #8fd0ff 12%, transparent); position: absolute; width: 150px; height: 64px; bottom: -90px; filter: blur(2px); opacity: 0; will-change: transform, opacity; animation: rise linear infinite; }
+    .bg .v { --c: color-mix(in srgb, #b4a5ff 13%, transparent); }
+    .chat { background: var(--c); border-radius: 22px 22px 22px 6px; }
+    .chat.v { border-radius: 22px 22px 6px 22px; }
+    /* The graph mask sits on ::before because CSS applies filter before mask; masking the span itself would cut the blur off. */
+    .graph::before { content: ""; position: absolute; inset: 0; background: var(--c); mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 64'%3E%3Cpath d='M14 40 48 12 60 50ZM48 12 98 22 60 50 110 54 98 22 138 14 110 54' fill='none' stroke='black' stroke-width='3.5' stroke-linejoin='round'/%3E%3Ccircle cx='14' cy='40' r='7'/%3E%3Ccircle cx='48' cy='12' r='7'/%3E%3Ccircle cx='60' cy='50' r='7'/%3E%3Ccircle cx='98' cy='22' r='7'/%3E%3Ccircle cx='110' cy='54' r='7'/%3E%3Ccircle cx='138' cy='14' r='7'/%3E%3C/svg%3E") center / contain no-repeat; }
+    .bars { background: linear-gradient(var(--c) 0 0) 0 100% / 20% 40% no-repeat, linear-gradient(var(--c) 0 0) 33.3% 100% / 20% 75% no-repeat, linear-gradient(var(--c) 0 0) 66.6% 100% / 20% 55% no-repeat, linear-gradient(var(--c) 0 0) 100% 100% / 20% 100% no-repeat; }
+    @keyframes rise { 0% { transform: translateY(0); opacity: 0; } 12%, 80% { opacity: 1; } 100% { transform: translateY(calc(-100vh - 180px)); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .bg { display: none; } }
   </style>
 </head>
 <body>
+  <div class="bg" aria-hidden="true">
+    <span class="chat" style="left:6%;animation-duration:64s;animation-delay:-6s"></span>
+    <span class="graph v" style="left:18%;animation-duration:74s;animation-delay:-41s"></span>
+    <span class="bars" style="left:32%;animation-duration:58s;animation-delay:-46s"></span>
+    <span class="chat v" style="left:46%;animation-duration:80s;animation-delay:-24s"></span>
+    <span class="graph" style="left:60%;animation-duration:70s;animation-delay:-46s"></span>
+    <span class="bars v" style="left:74%;animation-duration:62s;animation-delay:-3s"></span>
+    <span class="chat" style="left:86%;animation-duration:76s;animation-delay:-34s"></span>
+  </div>
   <main>
     <header>
       <h1><img src="zices-projects.png" alt="Zices Projects" width="1489" height="309"></h1>
@@ -33,14 +56,19 @@
     </header>
     <section>
       <article>
-        <h2><a href="https://github.com/iamzices/neo4j-guard">neo4j-guard</a></h2>
-        <p>A Python library that blocks unsafe Cypher queries before execution.</p>
-        <div><a href="https://docs.zices.com/neo4j-guard/overview">Docs <span aria-hidden="true">↗</span></a><a href="https://github.com/iamzices/neo4j-guard">GitHub <span aria-hidden="true">↗</span></a></div>
+        <h2><a href="https://chat.zices.com">Moment <span aria-hidden="true">↗</span></a></h2>
+        <p>A private, temporary chat room that runs peer-to-peer in the browser.</p>
+        <div><a href="https://github.com/iamzices/moment-chat">GitHub</a></div>
       </article>
       <article>
-        <h2><a href="https://github.com/iamzices/chartable">Chartable</a></h2>
+        <h2><a href="https://docs.zices.com/neo4j-guard/overview">neo4j-guard <span aria-hidden="true">↗</span></a></h2>
+        <p>A Python library that blocks unsafe Cypher queries before execution.</p>
+        <div><a href="https://docs.zices.com/neo4j-guard/overview">Docs</a><a href="https://github.com/iamzices/neo4j-guard">GitHub</a></div>
+      </article>
+      <article>
+        <h2><a href="https://docs.zices.com/chartable/overview">Chartable <span aria-hidden="true">↗</span></a></h2>
         <p>A JavaScript library for interactive charts and tables, built on Plotly.js and Tabulator.</p>
-        <div><a href="https://docs.zices.com/chartable/overview">Docs <span aria-hidden="true">↗</span></a><a href="https://github.com/iamzices/chartable">GitHub <span aria-hidden="true">↗</span></a></div>
+        <div><a href="https://docs.zices.com/chartable/overview">Docs</a><a href="https://github.com/iamzices/chartable">GitHub</a></div>
       </article>
     </section>
     <address>
